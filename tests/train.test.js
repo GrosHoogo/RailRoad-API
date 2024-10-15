@@ -1,11 +1,15 @@
 const request = require('supertest');
+const mongoose = require('mongoose');
 const app = require('../server');
 const Train = require('../models/Train');
 const User = require('../models/User');
-const mongoose = require('mongoose');
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGODB_URI_TEST, { useNewUrlParser: true, useUnifiedTopology: true });
+  await mongoose.connect(process.env.MONGODB_URI_TEST, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  });
 });
 
 afterAll(async () => {
@@ -26,7 +30,7 @@ describe('Train API', () => {
       role: 'admin'
     });
     await admin.save();
-    const token = admin.generateAuthToken();
+    const token = await admin.generateAuthToken();
 
     const response = await request(app)
       .post('/api/trains')

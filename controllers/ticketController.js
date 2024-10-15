@@ -35,3 +35,28 @@ exports.getMyTickets = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+exports.getTicket = async (req, res) => {
+    try {
+      const ticket = await Ticket.findById(req.params.id);
+      if (!ticket) {
+        return res.status(404).send({ error: 'Ticket not found' });
+      }
+      res.send(ticket);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  };
+
+  exports.cancelTicket = async (req, res) => {
+    try {
+      const ticket = await Ticket.findByIdAndDelete(req.params.id);
+      if (!ticket) {
+        return res.status(404).send({ error: 'Ticket not found' });
+      }
+      res.send(ticket);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  };
+  

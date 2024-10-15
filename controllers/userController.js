@@ -14,14 +14,12 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
-    if (!user || !(await user.comparePassword(req.body.password))) {
-      return res.status(401).send({ error: 'Invalid login credentials' });
-    }
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+    const user = await User.findByCredentials(req.body.email, req.body.password);
+    const token = user.generateAuthToken();
     res.send({ user, token });
   } catch (error) {
-    res.status(400).send(error);
+    console.error('Login error:', error);
+    res.status(400).send({ error: 'Invalid login credentials' });
   }
 };
 

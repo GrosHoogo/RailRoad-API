@@ -13,17 +13,29 @@ exports.getAllStations = async (req, res) => {
 
 exports.createStation = async (req, res) => {
   try {
-    const buffer = await sharp(req.file.buffer).resize({ width: 200, height: 200 }).png().toBuffer();
+    let image;
+    if (req.file) {
+      try {
+        const buffer = await sharp(req.file.buffer).resize({ width: 200, height: 200 }).png().toBuffer();
+        image = buffer.toString('base64');
+      } catch (error) {
+        console.error('Error processing image:', error);
+        return res.status(400).json({ message: "Error processing image", error: error.message });
+      }
+    }
     const station = new TrainStation({
       ...req.body,
-      image: buffer.toString('base64')
+      image
     });
     await station.save();
     res.status(201).send(station);
   } catch (error) {
-    res.status(400).send(error);
+    console.error('Error in createStation:', error);
+    res.status(400).json({ message: "Error creating station", error: error.message });
   }
 };
+
+  
 
 exports.getStation = async (req, res) => {
   try {
@@ -65,3 +77,4 @@ exports.deleteStation = async (req, res) => {
       res.status(500).send(error);
     }
   };
+

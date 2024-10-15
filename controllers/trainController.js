@@ -61,3 +61,21 @@ exports.deleteTrain = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+exports.getAllTrains = async (req, res) => {
+    const { sort, limit = 10, page = 1 } = req.query;
+    const skip = (page - 1) * limit;
+  
+    try {
+      const trains = await Train.find()
+        .sort(sort)
+        .limit(parseInt(limit))
+        .skip(skip)
+        .populate('start_station end_station');
+      res.status(200).json(trains);
+    } catch (error) {
+      console.error('Error in getAllTrains:', error);
+      res.status(500).json({ message: "Error retrieving trains", error: error.message });
+    }
+  };
+  

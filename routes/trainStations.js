@@ -3,7 +3,7 @@ const router = express.Router();
 const stationController = require('../controllers/stationController');
 const auth = require('../middleware/auth');
 const adminAuth = require('../middleware/adminAuth');
-const validate = require('../middleware/adminAuth');
+const validate = require('../middleware/validate');
 const { createStationSchema, updateStationSchema } = require('../utils/validationSchemas');
 const upload = require('../middleware/upload');
 

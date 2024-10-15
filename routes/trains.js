@@ -3,7 +3,7 @@ const router = express.Router();
 const trainController = require('../controllers/trainController');
 const auth = require('../middleware/auth');
 const adminAuth = require('../middleware/adminAuth');
-const validate = require('../middleware/adminAuth');
+const validate = require('../middleware/validate');
 const { createTrainSchema, updateTrainSchema } = require('../utils/validationSchemas');
 
 router.get('/', trainController.getAllTrains);

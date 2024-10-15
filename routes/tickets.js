@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 const ticketController = require('../controllers/ticketController');
 const auth = require('../middleware/auth');
-const employeeAuth = require('../middleware/employeeAuth');
-const validate = require('../middleware/adminAuth');
+const validate = require('../middleware/validate');
 const { createTicketSchema } = require('../utils/validationSchemas');
 
-router.post('/book', auth, validate(createTicketSchema), ticketController.bookTicket);
-router.patch('/validate/:id', auth, employeeAuth, ticketController.validateTicket);
-router.get('/my-tickets', auth, ticketController.getMyTickets);
+router.post('/', auth, validate(createTicketSchema), ticketController.bookTicket);
+router.get('/', auth, ticketController.getMyTickets);
+router.get('/:id', auth, ticketController.getTicket);
+router.delete('/:id', auth, ticketController.cancelTicket);
+router.patch('/:id/validate', auth, ticketController.validateTicket);
 
 module.exports = router;

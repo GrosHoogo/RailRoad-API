@@ -4,7 +4,11 @@ const User = require('../models/User');
 const mongoose = require('mongoose');
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGODB_URI_TEST, { useNewUrlParser: true, useUnifiedTopology: true });
+  await mongoose.connect(process.env.MONGODB_URI_TEST, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  });
 });
 
 afterAll(async () => {
@@ -17,7 +21,7 @@ beforeEach(async () => {
 
 test('Should signup a new user', async () => {
   const response = await request(app)
-    .post('/users/register')
+    .post('/api/users/register')
     .send({
       email: 'test@example.com',
       pseudo: 'testuser',
@@ -48,7 +52,7 @@ test('Should login existing user', async () => {
   await user.save();
 
   const response = await request(app)
-    .post('/users/login')
+    .post('/api/users/login')
     .send({
       email: 'existing@example.com',
       password: 'existingpass123'
